@@ -1,0 +1,18 @@
+.backGroundImage{
+    background: url('../../../public/images/airplane-wallpaper.png') no-repeat center center;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -ms-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+    height: 75vh;
+}
+
+.overFlowX{
+    overflow-x: auto;
+}
+
+.paginationBlock{
+    float:right;
+    margin-top:10px
+}

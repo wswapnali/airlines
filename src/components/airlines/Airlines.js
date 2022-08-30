@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from "react";
+import Container from 'react-bootstrap/Container';
+import Table from 'react-bootstrap/Table';
+import Pagination from 'react-bootstrap/Pagination';
 import './Airlines.css'
 import '../../App.css'
+import { getDefaultNormalizer } from "@testing-library/react";
+
 
 
 function Airlines(props){
@@ -9,10 +14,16 @@ function Airlines(props){
     const [isLoaded, setIsLoaded] = useState(false);
     const [items, setItems] = useState([]);
     const [airlinesList, setAirlinesList] = useState([])
+    const [currentPage, setCurrentPage] = useState(1)
+    const [recordsPerPage] = useState(10);
 
-    // https://api.instantwebtools.net/v1/airlines
+    let indexOfLastRecord = currentPage * recordsPerPage;
+    let indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+
+    let nPages = Math.ceil(items.length / recordsPerPage)
+
     
-    let list = []
+
     useEffect(() => {
         // fetch('https://api.instantwebtools.net/v1/airlines/1')
         fetch('https://api.instantwebtools.net/v1/airlines')
@@ -25,35 +36,54 @@ function Airlines(props){
         //     )
         .then(response => {
             setIsLoaded(true);
-            setAirlinesList(response)
-            // console.log("response:",response)
-            // list = response
+            setItems(response)
+            setCurrentPage(1)
+            indexOfLastRecord = currentPage * recordsPerPage;
+            indexOfFirstRecord = indexOfLastRecord - recordsPerPage;        
+            nPages = Math.ceil(items.length / recordsPerPage)
+            setAirlinesList(response.slice(0,10))
         
         })
         }, [])
-    // const [airlinesList, setAirlinesList] = useState([
-    //     {
-    //         "id": 1,
-    //         "name": "Quatar Airways",
-    //         "country": "Quatar",
-    //         "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/9/9b/Qatar_Airways_Logo.svg/300px-Qatar_Airways_Logo.svg.png",
-    //         "slogan": "Going Places Together",
-    //         "head_quaters": "Qatar Airways Towers, Doha, Qatar",
-    //         "website": "www.qatarairways.com",
-    //         "established": "1994"
-    //     },
-    //     {
-    //         "id": 2,
-    //         "name": "Singapore Airlines",
-    //         "country": "Singapore",
-    //         "logo": "https://upload.wikimedia.org/wikipedia/en/thumb/6/6b/Singapore_Airlines_Logo_2.svg/250px-Singapore_Airlines_Logo_2.svg.png",
-    //         "slogan": "A Great Way to Fly",
-    //         "head_quaters": "Airline House, 25 Airline Road, Singapore 819829",
-    //         "website": "www.singaporeair.com",
-    //         "established": "1947"
-    //     }
-    // ]);
+
+        const nextPage = () => {
+            if(currentPage != nPages) {
+                console.log("indexOfFirstRecord : ",indexOfFirstRecord )
+                console.log("indexOfLastRecord : ",indexOfLastRecord )
+                setCurrentPage(currentPage + 1)
+                indexOfLastRecord = (currentPage  + 1) * recordsPerPage;
+                indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+                setAirlinesList(items.slice(indexOfFirstRecord,indexOfLastRecord))
+            }
+        }
+
+        const prevPage = () => {
+            if(currentPage != 1) {
+                setCurrentPage(currentPage - 1)
+                indexOfLastRecord = currentPage * recordsPerPage;
+                indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+                setAirlinesList(items.slice(indexOfFirstRecord,indexOfLastRecord))
+            }
+        }
     
+        const firstPage = () => {
+            if(currentPage != nPages) {
+                setCurrentPage(1)
+                indexOfLastRecord = 1 * recordsPerPage;
+                indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+                setAirlinesList(items.slice(indexOfFirstRecord,indexOfLastRecord))
+            }
+        }
+        const lastPage = () => {
+            if(currentPage != 1) {
+                setCurrentPage(nPages)
+                
+                indexOfLastRecord = currentPage * recordsPerPage;
+                indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
+                setAirlinesList(items.slice(indexOfFirstRecord,indexOfLastRecord))
+                
+            }
+        }
 
     if (error) {
         return <div>Error: {error.message}</div>;
@@ -62,30 +92,54 @@ function Airlines(props){
     } else {
         return (
             <div>
-                <h1 className="text-center">Airlines list</h1>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Country</th>
-                            <th>Slogan</th>
-                            <th>Head Quaters</th>
-                            <th>Established</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {airlinesList.map((airline,i) => (
-                            <tr key={i}>
-                                <td>{airline.name}</td>
-                                <td>{airline.country}</td>
-                                <td>{airline.slogan}</td>
-                                <td>{airline.head_quaters}</td>
-                                <td>{airline.established}</td>
+                <div className="backGroundImage">
+                   
+                    {/* <img src={process.env.PUBLIC_URL + '/images/airplane-wallpaper.png'} />; */}
+                </div>
+                <Container className="overFlowX">
+                    <h1 className="text-center">Airlines list</h1>
+                    <Table striped bordered hover responsive="md">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Country</th>
+                                <th>Slogan</th>
+                                <th>Head Quaters</th>
+                                <th>Established</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {airlinesList.map((airline,i) => (
+                                <tr key={i}>
+                                    <td>{airline.name}</td>
+                                    <td>{airline.country}</td>
+                                    <td>{airline.slogan}</td>
+                                    <td>{airline.head_quaters}</td>
+                                    <td>{airline.established}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </Table>
+
+                    <div  className="paginationBlock">
+                        <Pagination
+                            // nPages = { nPages }
+                            // currentPage = { currentPage } 
+                            // setCurrentPage = { setCurrentPage }
+                            >
+                            <Pagination.First  onClick={firstPage}/>
+                            <Pagination.Prev onClick={prevPage}/>
+                            <Pagination.Item>{currentPage}</Pagination.Item>
+                            <Pagination.Next onClick={nextPage}/>
+                            <Pagination.Last onClick={lastPage} />
+
+                            
+                        </Pagination>
+                    </div>
+                        
+                </Container>
             </div>
+
         )
     }
 }
