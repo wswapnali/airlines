@@ -5,3 +5,12 @@
 .text-right{
   text-align: right;
 }
+
+.pageHearder{
+  padding:20px;
+  text-align:center;
+  color:#333;
+  text-decoration: underline;
+  font-weight: 700;
+
+}
