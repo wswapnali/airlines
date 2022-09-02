@@ -1,14 +1,28 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import App from './App';
+import { Link } from 'react-router-dom';
+import Container from 'react-bootstrap/Container';
+
+const Details = () => {
+	return (
+		<div>
+				<h1>Details page </h1>
+				<Link to='/details/:id'>Go to details</Link>
+		</div>
+	)
+};
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
+  
   <React.StrictMode>
     <App />
   </React.StrictMode>
 );
 
+
+export {Details}
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
