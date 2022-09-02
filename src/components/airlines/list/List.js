@@ -50,18 +50,18 @@ function List(props){
         }, [])
 
         const nextPage = () => {
-            if(currentPage != nPages) {
-                console.log("indexOfFirstRecord : ",indexOfFirstRecord )
-                console.log("indexOfLastRecord : ",indexOfLastRecord )
+            if(currentPage < nPages) {
                 setCurrentPage(currentPage + 1)
                 indexOfLastRecord = (currentPage  + 1) * recordsPerPage;
                 indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
                 setAirlinesList(items.slice(indexOfFirstRecord,indexOfLastRecord))
+                   console.log("indexOfLastRecord : ", indexOfLastRecord)
+                console.log("indexOfFirstRecord : ", indexOfFirstRecord)
             }
         }
 
         const prevPage = () => {
-            if(currentPage != 1) {
+            if(currentPage > 1) {
                 setCurrentPage(currentPage - 1)
                 indexOfLastRecord = currentPage * recordsPerPage;
                 indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
@@ -70,7 +70,7 @@ function List(props){
         }
     
         const firstPage = () => {
-            if(currentPage != nPages) {
+            if(currentPage > 1) {
                 setCurrentPage(1)
                 indexOfLastRecord = 1 * recordsPerPage;
                 indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
@@ -78,13 +78,11 @@ function List(props){
             }
         }
         const lastPage = () => {
-            if(currentPage != 1) {
-                setCurrentPage(nPages)
-                
-                indexOfLastRecord = currentPage * recordsPerPage;
+            if(currentPage < nPages) {
+                setCurrentPage(nPages)   
+                indexOfLastRecord = nPages * recordsPerPage;
                 indexOfFirstRecord = indexOfLastRecord - recordsPerPage;
                 setAirlinesList(items.slice(indexOfFirstRecord,indexOfLastRecord))
-                
             }
         }
 
@@ -108,8 +106,8 @@ function List(props){
                                 <tr>
                                     <th>Name</th>
                                     <th>Country</th>
-                                    <th>Slogan</th>
-                                    <th>Head Quaters</th>
+                                    {/* <th>Slogan</th> */}
+                                    {/* <th>Head Quaters</th> */}
                                     <th>Established</th>
                                 </tr>
                             </thead>
@@ -126,8 +124,8 @@ function List(props){
                                             {/* </Route> */}
                                         </td>
                                         <td>{airline.country}</td>
-                                        <td>{airline.slogan}</td>
-                                        <td>{airline.head_quaters}</td>
+                                        {/* <td>{airline.slogan}</td> */}
+                                        {/* <td>{airline.head_quaters}</td> */}
                                         <td>{airline.established}</td>
                                     </tr>
                                 ))}
