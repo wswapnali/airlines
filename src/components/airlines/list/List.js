@@ -2,11 +2,10 @@ import React, { useState, useEffect } from "react";
 import Container from 'react-bootstrap/Container';
 import Table from 'react-bootstrap/Table';
 import Pagination from 'react-bootstrap/Pagination';
-import Details from '../details/Details'
+// import Details from '../details/Details'
 import './List.css'
 import '../../../App.css'
-import { getDefaultNormalizer } from "@testing-library/react";
-import {Routes, Route, useNavigate } from 'react-router-dom';
+import {Link } from 'react-router-dom';
 
 
 function List(props){
@@ -119,7 +118,11 @@ function List(props){
                                     <tr key={i}>
                                         <td>
                                             {/* <Route exact path="/home" element={<Home />} > */}
-                                            {airline.name}
+                                            {/* {airline.name} */}
+                                            <Link to={`/details/${airline.id}`}>{airline.name}</Link>
+                                            {/* <Routes>
+                                                <Route exact path={`/details/${airline.id}`} element={< Details />}>{airline.name}</Route>
+                                            </Routes> */}
                                             {/* </Route> */}
                                         </td>
                                         <td>{airline.country}</td>
